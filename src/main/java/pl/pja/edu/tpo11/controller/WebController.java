@@ -1,13 +1,16 @@
 package pl.pja.edu.tpo11.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 import pl.pja.edu.tpo11.dto.CreateUrlDto;
 import pl.pja.edu.tpo11.dto.UpdateUrlDto;
 import pl.pja.edu.tpo11.dto.UrlResponseDto;
@@ -124,13 +127,19 @@ public class WebController {
 
     @GetMapping("/change-language")
     public String changeLanguage(@RequestParam String lang,
-                                 HttpServletRequest request) {
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) {
+        LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+        if (localeResolver != null) {
+            localeResolver.setLocale(request, response, Locale.forLanguageTag(lang));
+        }
+
         String referer = request.getHeader("Referer");
         if (referer == null) {
             referer = "/web/create";
         }
 
         String baseUrl = referer.split("\\?")[0];
-        return "redirect:" + baseUrl + "?lang=" + lang;
+        return "redirect:" + baseUrl;
     }
 }

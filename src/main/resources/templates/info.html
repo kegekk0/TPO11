@@ -8,15 +8,15 @@
     <div class="card-body">
       <h5 class="card-title" th:text="${shortUrl.name}"></h5>
       <p class="card-text">
-        <strong>Short URL:</strong>
+        <strong>[[#{text.short.url}]]:</strong>
         <a th:href="${shortUrl.redirectUrl}" th:text="${shortUrl.redirectUrl}"></a>
       </p>
       <p class="card-text">
-        <strong>Target URL:</strong>
+        <strong>[[#{text.target.url}]]:</strong>
         <a th:href="${shortUrl.targetUrl}" th:text="${shortUrl.targetUrl}"></a>
       </p>
       <p class="card-text">
-        <strong>Visits:</strong>
+        <strong>[[#{text.visits}]]:</strong>
         <span th:text="${shortUrl.visits}"></span>
       </p>
 
@@ -26,7 +26,7 @@
         <form th:action="@{'/web/delete/' + ${shortUrl.id}}" method="post" class="d-inline">
           <div class="input-group" th:if="${shortUrl.password != null}">
             <label>
-              <input type="password" name="password" class="form-control" placeholder="Password" required>
+              <input type="password" name="password" class="form-control" th:placeholder="#{text.password.placeholder}" required>
             </label>
             <button type="submit" class="btn btn-danger">[[#{button.delete}]]</button>
           </div>
@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <a href="/web/create" class="btn btn-outline-secondary">Create another</a>
+  <a href="/web/create" class="btn btn-outline-secondary">[[#{text.create.another}]]</a>
 </section>
 </body>
 </html>

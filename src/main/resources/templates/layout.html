@@ -14,12 +14,14 @@
     <div class="navbar-nav ms-auto">
       <div class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown">
-          [[#{language.${#locale.language}}]]
+          <span th:if="${#locale.language == 'en'}" th:text="#{language.en}">English</span>
+          <span th:if="${#locale.language == 'pl'}" th:text="#{language.pl}">Polski</span>
+          <span th:if="${#locale.language == 'de'}" th:text="#{language.de}">Deutsch</span>
         </a>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" th:href="@{/web/change-language(lang='en')}">[[#{language.en}]]</a></li>
-          <li><a class="dropdown-item" th:href="@{/web/change-language(lang='pl')}">[[#{language.pl}]]</a></li>
-          <li><a class="dropdown-item" th:href="@{/web/change-language(lang='de')}">[[#{language.de}]]</a></li>
+          <li><a class="dropdown-item" th:href="@{/web/change-language(lang='en')}" th:text="#{language.en}">English</a></li>
+          <li><a class="dropdown-item" th:href="@{/web/change-language(lang='pl')}" th:text="#{language.pl}">Polski</a></li>
+          <li><a class="dropdown-item" th:href="@{/web/change-language(lang='de')}" th:text="#{language.de}">Deutsch</a></li>
         </ul>
       </div>
     </div>

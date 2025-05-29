@@ -6,7 +6,7 @@
 
   <form th:action="@{'/web/edit/' + ${id}}" method="post" th:object="${updateUrlDto}">
     <div class="mb-3">
-      <label for="name" class="form-label">Name</label>
+      <label for="name" class="form-label">[[#{label.name}]]</label>
       <input type="text" class="form-control" id="name" th:field="*{name}">
       <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback d-block">
         <span th:each="err : ${#fields.errors('name')}" th:text="${err}"></span>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="mb-3">
-      <label for="targetUrl" class="form-label">Target URL</label>
+      <label for="targetUrl" class="form-label">[[#{label.targetUrl}]]</label>
       <input type="url" class="form-control" id="targetUrl" th:field="*{targetUrl}">
       <div th:if="${#fields.hasErrors('targetUrl')}" class="invalid-feedback d-block">
         <span th:each="err : ${#fields.errors('targetUrl')}" th:text="${err}"></span>
@@ -22,7 +22,7 @@
     </div>
 
     <div class="mb-3" th:if="${shortUrl?.password != null}">
-      <label for="password" class="form-label">Password</label>
+      <label for="password" class="form-label">[[#{label.password.required}]]</label>
       <input type="password" class="form-control" id="password" th:field="*{password}" required>
       <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback d-block">
         <span th:each="err : ${#fields.errors('password')}" th:text="${err}"></span>
@@ -30,7 +30,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">[[#{button.submit}]]</button>
-    <a th:href="@{'/web/info/' + ${id}}" class="btn btn-outline-secondary ms-2">Cancel</a>
+    <a th:href="@{'/web/info/' + ${id}}" class="btn btn-outline-secondary ms-2">[[#{button.cancel}]]</a>
   </form>
 </section>
 </body>
