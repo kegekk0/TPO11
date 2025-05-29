@@ -5,7 +5,6 @@ public class UpdateUrlDto {
     private String targetUrl;
     private String password;
 
-    // Getters and Setters
     public String getName() {
         return name;
     }

@@ -7,7 +7,6 @@ public class UrlResponseDto {
     private String redirectUrl;
     private int visits;
 
-    // Constructors
     public UrlResponseDto() {
     }
 
@@ -19,7 +18,6 @@ public class UrlResponseDto {
         this.visits = visits;
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }

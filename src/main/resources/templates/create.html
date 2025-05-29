@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::section})}">
+<body>
+<section>
+    <h1 class="mb-4">[[#{header.create}]]</h1>
+
+    <form th:action="@{/web/create}" method="post" th:object="${createUrlDto}">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}">
+            <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback d-block">
+                <span th:each="err : ${#fields.errors('name')}" th:text="${err}"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="targetUrl" class="form-label">Target URL</label>
+            <input type="url" class="form-control" id="targetUrl" th:field="*{targetUrl}">
+            <div th:if="${#fields.hasErrors('targetUrl')}" class="invalid-feedback d-block">
+                <span th:each="err : ${#fields.errors('targetUrl')}" th:text="${err}"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password (optional)</label>
+            <input type="password" class="form-control" id="password" th:field="*{password}">
+            <small class="form-text text-muted">Password requirements: 1 lowercase, 2 uppercase, 3 digits, 4 special chars, min 10 length</small>
+            <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback d-block">
+                <span th:each="err : ${#fields.errors('password')}" th:text="${err}"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">[[#{button.submit}]]</button>
+    </form>
+</section>
+</body>
+</html>

@@ -2,7 +2,10 @@ package pl.pja.edu.tpo11.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pl.pja.edu.tpo11.dto.CreateUrlDto;
+import pl.pja.edu.tpo11.dto.UpdateUrlDto;
 import pl.pja.edu.tpo11.dto.UrlResponseDto;
+import pl.pja.edu.tpo11.exception.WrongPasswordException;
 import pl.pja.edu.tpo11.model.ShortUrl;
 import pl.pja.edu.tpo11.repository.ShortUrlRepository;
 
@@ -21,7 +24,7 @@ public class UrlShortenerService {
     }
 
     public UrlResponseDto createShortUrl(CreateUrlDto dto) {
-        String id = generateRandomId(10);
+        String id = generateRandomId();
         String redirectUrl = baseUrl + "/red/" + id;
 
         ShortUrl shortUrl = new ShortUrl(
@@ -101,11 +104,11 @@ public class UrlShortenerService {
         repository.delete(shortUrl);
     }
 
-    private String generateRandomId(int length) {
+    private String generateRandomId() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < 7; i++) {
             sb.append(chars.charAt(random.nextInt(chars.length())));
         }
 

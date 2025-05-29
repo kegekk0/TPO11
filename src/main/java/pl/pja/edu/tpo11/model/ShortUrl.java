@@ -1,19 +1,32 @@
 package pl.pja.edu.tpo11.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 public class ShortUrl {
     @Id
     private String id;
+
+    @Size(min = 5, max = 20, message = "{validation.name.size}")
     private String name;
+
+    @URL(message = "{validation.url.invalid}")
+    @Pattern(regexp = "^https://.*", message = "{validation.url.https}")
+    @Column(unique = true)
     private String targetUrl;
+
     private String redirectUrl;
     private int visits;
+
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=(.*[A-Z]){2})(?=(.*\\d){3})(?=(.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]){4}).{10,}$",
+            message = "{validation.password.pattern}"
+    )
     private String password;
 
-    // Constructors
     public ShortUrl() {
     }
 
@@ -26,7 +39,6 @@ public class ShortUrl {
         this.password = password;
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }
