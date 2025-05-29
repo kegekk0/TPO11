@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
-import pl.pja.edu.tpo11.dto.CreateUrlDto;
-import pl.pja.edu.tpo11.dto.UpdateUrlDto;
-import pl.pja.edu.tpo11.dto.UrlResponseDto;
-import pl.pja.edu.tpo11.exception.WrongPasswordException;
+import pl.pja.edu.tpo11.dto.*;
+import pl.pja.edu.tpo11.exception.*;
 import pl.pja.edu.tpo11.service.UrlShortenerService;
 
+import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -41,13 +40,21 @@ public class WebController {
                                  BindingResult result,
                                  Model model,
                                  Locale locale) {
-        if (result.hasErrors()) {
-            return "create";
-        }
-
         try {
-            UrlResponseDto response = service.createShortUrl(createUrlDto);
+            service.validatePassword(createUrlDto.getPassword());
+
+            if (result.hasErrors()) {
+                return "create";
+            }
+
+            UrlResponseDto response = service.createShortUrl(createUrlDto, locale);
             return "redirect:/web/info/" + response.getId();
+        } catch (DuplicateUrlException e) {
+            model.addAttribute("urlError", e.getMessage());
+            return "create";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("passwordError", e.getMessage());
+            return "create";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "create";
@@ -114,15 +121,15 @@ public class WebController {
                             Locale locale) {
         try {
             service.deleteUrl(id, password);
-            redirectAttributes.addFlashAttribute("success", messageSource.getMessage("url.deleted", null, locale));
-            return "redirect:/web/create";
+            redirectAttributes.addFlashAttribute("success",
+                    messageSource.getMessage("url.deleted", null, locale));
         } catch (WrongPasswordException e) {
-            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("error.wrong.password", null, locale));
-            return "redirect:/web/info/" + id;
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("error.wrong.password", null, locale));
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/web/info/" + id;
         }
+        return "redirect:/web/all";
     }
 
     @GetMapping("/change-language")
@@ -142,4 +149,12 @@ public class WebController {
         String baseUrl = referer.split("\\?")[0];
         return "redirect:" + baseUrl;
     }
+
+    @GetMapping("/all")
+    public String showAllUrls(Model model) {
+        List<UrlResponseDto> urls = service.getAllUrls();
+        model.addAttribute("urls", urls);
+        return "all-urls";
+    }
+
 }

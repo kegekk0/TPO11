@@ -6,16 +6,18 @@ public class UrlResponseDto {
     private String targetUrl;
     private String redirectUrl;
     private int visits;
+    private String password;
 
     public UrlResponseDto() {
     }
 
-    public UrlResponseDto(String id, String name, String targetUrl, String redirectUrl, int visits) {
+    public UrlResponseDto(String id, String name, String targetUrl, String redirectUrl, int visits, String password) {
         this.id = id;
         this.name = name;
         this.targetUrl = targetUrl;
         this.redirectUrl = redirectUrl;
         this.visits = visits;
+        this.password = password;
     }
 
     public String getId() {
@@ -56,5 +58,13 @@ public class UrlResponseDto {
 
     public void setVisits(int visits) {
         this.visits = visits;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

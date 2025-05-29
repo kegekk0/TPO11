@@ -1,15 +1,17 @@
 package pl.pja.edu.tpo11.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.pja.edu.tpo11.dto.CreateUrlDto;
 import pl.pja.edu.tpo11.dto.UpdateUrlDto;
 import pl.pja.edu.tpo11.dto.UrlResponseDto;
+import pl.pja.edu.tpo11.exception.DuplicateUrlException;
 import pl.pja.edu.tpo11.service.UrlShortenerService;
+
+import java.net.URI;
+import java.util.Locale;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/links")
@@ -20,12 +22,24 @@ public class ApiController {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity<UrlResponseDto> createShortUrl(@RequestBody CreateUrlDto dto, HttpServletRequest request) {
-        UrlResponseDto response = service.createShortUrl(dto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Location", request.getRequestURL() + "/" + response.getId())
-                .body(response);
+    public ResponseEntity<?> createShortUrl(@RequestBody CreateUrlDto createUrlDto,
+                                            @RequestHeader("Accept-Language") String acceptLanguage) {
+        Locale locale = Locale.forLanguageTag(acceptLanguage);
+        try {
+            service.validatePassword(createUrlDto.getPassword());
+            UrlResponseDto response = service.createShortUrl(createUrlDto, locale);
+            return ResponseEntity.created(URI.create("/api/links/" + response.getId()))
+                    .body(response);
+        } catch (DuplicateUrlException e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("urlError", e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("passwordError", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")

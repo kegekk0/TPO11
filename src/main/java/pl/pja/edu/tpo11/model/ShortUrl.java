@@ -1,5 +1,6 @@
 package pl.pja.edu.tpo11.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -25,6 +26,7 @@ public class ShortUrl {
             regexp = "^(?=.*[a-z])(?=(.*[A-Z]){2})(?=(.*\\d){3})(?=(.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]){4}).{10,}$",
             message = "{validation.password.pattern}"
     )
+    @Nullable
     private String password;
 
     public ShortUrl() {
@@ -79,11 +81,12 @@ public class ShortUrl {
         this.visits = visits;
     }
 
+    @Nullable
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(@Nullable String password) {
         this.password = password;
     }
 }

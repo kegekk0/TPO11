@@ -14,20 +14,34 @@
         </div>
 
         <div class="mb-3">
-            <label for="targetUrl" class="form-label">[[#{label.targetUrl}]]</label>
+            <label for="targetUrl" class="form-label">Target URL</label>
             <input type="url" class="form-control" id="targetUrl" th:field="*{targetUrl}">
+
+            <div th:if="${urlError}" class="invalid-feedback d-block">
+                <span th:text="${urlError}"></span>
+            </div>
+
             <div th:if="${#fields.hasErrors('targetUrl')}" class="invalid-feedback d-block">
                 <span th:each="err : ${#fields.errors('targetUrl')}" th:text="${err}"></span>
             </div>
         </div>
 
         <div class="mb-3">
-            <label for="password" class="form-label">[[#{label.password}]]</label>
+            <label for="password" class="form-label">Password (optional)</label>
             <input type="password" class="form-control" id="password" th:field="*{password}">
-            <small class="form-text text-muted">[[#{text.password.requirements}]]</small>
+
+            <div th:if="${passwordError}" class="invalid-feedback d-block">
+                <span th:text="${passwordError}"></span>
+            </div>
+
             <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback d-block">
                 <span th:each="err : ${#fields.errors('password')}" th:text="${err}"></span>
             </div>
+
+            <small class="form-text text-muted">
+                Password requirements:
+                1 lowercase, 2 uppercase, 3 digits, 4 special chars, min 10 length
+            </small>
         </div>
 
         <button type="submit" class="btn btn-primary">[[#{button.submit}]]</button>
