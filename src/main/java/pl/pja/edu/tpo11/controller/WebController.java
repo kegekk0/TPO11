@@ -125,6 +125,12 @@ public class WebController {
     @GetMapping("/change-language")
     public String changeLanguage(@RequestParam String lang,
                                  HttpServletRequest request) {
-        return "redirect:" + request.getHeader("Referer") + "?lang=" + lang;
+        String referer = request.getHeader("Referer");
+        if (referer == null) {
+            referer = "/web/create";
+        }
+
+        String baseUrl = referer.split("\\?")[0];
+        return "redirect:" + baseUrl + "?lang=" + lang;
     }
 }
